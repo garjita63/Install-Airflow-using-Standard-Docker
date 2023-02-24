@@ -45,7 +45,7 @@ Optionally, you can enable flower by adding --profile flower option, e.g. docker
 
 All these services allow you to run Airflow with [CeleryExecutor](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/celery.html).
 
-For more information, see [Architecture Overviewh](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/overview.html).
+For more information, see [Architecture Overview](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/overview.html).
 
 Some directories in the container are mounted, which means that their contents are synchronized between your computer and the container.
 
