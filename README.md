@@ -92,7 +92,7 @@ airflow-init_1       | 2.5.1
 start_airflow-init_1 exited with code 0
 ```
 
-The account created has the login airflow and the password airflow.
+The account created has the login ***airflow*** and the password ***airflow***.
 
 ### Cleaning-up the environment
 
