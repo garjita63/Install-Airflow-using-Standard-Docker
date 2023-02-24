@@ -43,11 +43,9 @@ Optionally, you can enable flower by adding --profile flower option, e.g. docker
 
 - flower - The flower app for monitoring the environment. It is available at http://localhost:5555.
 
-All these services allow you to run Airflow with CeleryExecutor. 
-https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/celery.html
+All these services allow you to run Airflow with [CeleryExecutor](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/executor/celery.html).
 
-For more information, see Architecture Overview.
-https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/overview.html
+For more information, see [Architecture Overviewh](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/overview.html).
 
 Some directories in the container are mounted, which means that their contents are synchronized between your computer and the container.
 
@@ -70,8 +68,7 @@ mkdir -p ./dags ./logs ./plugins
 echo -e "AIRFLOW_UID=$(id -u)" > .env
 ```
 
-See Docker Compose environment variables
-https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html#docker-compose-env-variables
+See [Docker Compose environment variables](https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html#docker-compose-env-variables).
 
 For other operating systems, you may get a warning that AIRFLOW_UID is not set, but you can safely ignore it. You can also manually create an .env file in the same folder as docker-compose.yaml with this content to get rid of the warning:
 
@@ -119,8 +116,7 @@ docker compose up
   
 ***Note***
 
-docker-compose is old syntax. Please check Stackoverflow.
-https://stackoverflow.com/questions/66514436/difference-between-docker-compose-and-docker-compose
+docker-compose is old syntax. Please check [Stackoverflow](https://stackoverflow.com/questions/66514436/difference-between-docker-compose-and-docker-compose).
 
 In a second terminal you can check the condition of the containers and make sure that no containers are in an unhealthy condition:
   
@@ -185,31 +181,30 @@ docker compose down --volumes --rmi all
 ### Using custom images
 When you want to run Airflow locally, you might want to use an extended image, containing some additional dependencies - for example you might add new python packages, or upgrade airflow providers to a later version. This can be done very easily by specifying build: . in your docker-compose.yaml and placing a custom Dockerfile alongside your docker-compose.yaml. Then you can use docker compose build command to build your image (you need to do it only once). You can also add the --build flag to your docker compose commands to rebuild the images on-the-fly when you run other docker compose commands.
 
-Examples of how you can extend the image with custom providers, python packages, apt packages and more can be found in Building the image.
-  https://airflow.apache.org/docs/docker-stack/build.html
+Examples of how you can extend the image with custom providers, python packages, apt packages and more can be found in [Building the image](https://airflow.apache.org/docs/docker-stack/build.html).
   
   Networking
-In general, if you want to use Airflow locally, your DAGs may try to connect to servers which are running on the host. In order to achieve that, an extra configuration must be added in docker-compose.yaml. For example, on Linux the configuration must be in the section services: airflow-worker adding extra_hosts: - "host.docker.internal:host-gateway"; and use host.docker.internal instead of localhost. This configuration vary in different platforms. Please check the Docker documentation for Windows and Mac for further information.  
+In general, if you want to use Airflow locally, your DAGs may try to connect to servers which are running on the host. In order to achieve that, an extra configuration must be added in docker-compose.yaml. For example, on Linux the configuration must be in the section services: airflow-worker adding extra_hosts: - "host.docker.internal:host-gateway"; and use host.docker.internal instead of localhost. This configuration vary in different platforms. Please check the Docker documentation for [Windows](https://docs.docker.com/desktop/networking/#use-cases-and-workarounds) and Mac for further information.  
   
-  https://docs.docker.com/desktop/networking/#use-cases-and-workarounds
+  
   
 ## FAQ: Frequently asked questions
 ModuleNotFoundError: No module named 'XYZ'
-The Docker Compose file uses the latest Airflow image (apache/airflow). If you need to install a new Python library or system library, you can customize and extend it.
-https://hub.docker.com/r/apache/airflow
-https://airflow.apache.org/docs/docker-stack/index.html
+The Docker Compose file uses the latest Airflow image [(apache/airflow)](https://hub.docker.com/r/apache/airflow). 
+If you need to install a new Python library or system library, you can [customize and extend it](https://airflow.apache.org/docs/docker-stack/index.html).
+
+
 
 ### What’s Next?
-From this point, you can head to the Tutorials section for further examples or the How-to Guides section if you’re ready to get your hands dirty.
-  Tutorial: https://airflow.apache.org/docs/apache-airflow/stable/tutorial/index.html
-  How-to-Guide: https://airflow.apache.org/docs/apache-airflow/stable/howto/index.html
+From this point, you can head to the [Tutorials](https://airflow.apache.org/docs/apache-airflow/stable/tutorial/index.html) section for further examples or the [How-to Guides](https://airflow.apache.org/docs/apache-airflow/stable/howto/index.html) section if you’re ready to get your hands dirty.
   
   
 ### Environment variables supported by Docker Compose
 Do not confuse the variable names here with the build arguments set when image is built. The AIRFLOW_UID build arg defaults to 50000 when the image is built, so it is “baked” into the image. On the other hand, the environment variables below can be set when the container is running, using - for example - result of id -u command, which allows to use the dynamic host runtime user id which is unknown at the time of building the image.
   
   ![image](https://user-images.githubusercontent.com/77673886/221150992-3c6851c7-b531-476f-ae06-b210ba392995.png)
-
+https://airflow.apache.org/docs/docker-stack/entrypoint.html#arbitrary-docker-user
+  
   Note
 
 Before Airflow 2.2, the Docker Compose also had AIRFLOW_GID parameter, but it did not provide any additional functionality - only added confusion - so it has been removed.
