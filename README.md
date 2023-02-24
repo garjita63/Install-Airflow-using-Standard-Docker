@@ -15,13 +15,16 @@ Older versions of docker-compose do not support all the features required by the
 
 ![image](https://user-images.githubusercontent.com/77673886/221151934-00e484db-3824-48a8-8bc6-dfb4a864872b.png)
 
+```ruby
 docker run --rm "debian:bullseye-slim" bash -c 'numfmt --to iec $(echo $(($(getconf _PHYS_PAGES) * $(getconf PAGE_SIZE))))'
+```
 
 ### Fetching docker-compose.yaml
 To deploy Airflow on Docker Compose, you should fetch docker-compose.yaml.
 
+```ruby
 curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.5.1/docker-compose.yaml'
-
+```
 This file contains several service definitions:
 
 - airflow-scheduler - The scheduler monitors all tasks and DAGs, then triggers the task instances once their dependencies are complete.
@@ -62,27 +65,35 @@ Before starting Airflow for the first time, you need to prepare your environment
 #### Setting the right Airflow user
 On Linux, the quick-start needs to know your host user id and needs to have group id set to 0. Otherwise the files created in dags, logs and plugins will be created with root user ownership. You have to make sure to configure them for the docker-compose:
 
+```ruby
 mkdir -p ./dags ./logs ./plugins
 echo -e "AIRFLOW_UID=$(id -u)" > .env
+```
 
 See Docker Compose environment variables
 https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index.html#docker-compose-env-variables
 
 For other operating systems, you may get a warning that AIRFLOW_UID is not set, but you can safely ignore it. You can also manually create an .env file in the same folder as docker-compose.yaml with this content to get rid of the warning:
 
+```ruby
 AIRFLOW_UID=50000
+```
 
 #### Initialize the database
 On all operating systems, you need to run database migrations and create the first user account. To do this, run.
 
+```ruby
 docker compose up airflow-init
+```
 
 After initialization is complete, you should see a message like this:
 
+```
 airflow-init_1       | Upgrades done
 airflow-init_1       | Admin user airflow created
 airflow-init_1       | 2.5.1
 start_airflow-init_1 exited with code 0
+```
 
 The account created has the login airflow and the password airflow.
 
@@ -102,23 +113,28 @@ The best way to do this is to:
   
 Now you can start all services:
 
+```ruby
 docker compose up
+```
   
-Note
+***Note***
 
 docker-compose is old syntax. Please check Stackoverflow.
 https://stackoverflow.com/questions/66514436/difference-between-docker-compose-and-docker-compose
 
 In a second terminal you can check the condition of the containers and make sure that no containers are in an unhealthy condition:
   
-$ docker ps
+```ruby 
+$ docker ps 
+  
 CONTAINER ID   IMAGE                  COMMAND                  CREATED          STATUS                    PORTS                              NAMES
 247ebe6cf87a   apache/airflow:2.5.1   "/usr/bin/dumb-init …"   3 minutes ago    Up 3 minutes (healthy)    8080/tcp                           compose_airflow-worker_1
 ed9b09fc84b1   apache/airflow:2.5.1   "/usr/bin/dumb-init …"   3 minutes ago    Up 3 minutes (healthy)    8080/tcp                           compose_airflow-scheduler_1
 7cb1fb603a98   apache/airflow:2.5.1   "/usr/bin/dumb-init …"   3 minutes ago    Up 3 minutes (healthy)    0.0.0.0:8080->8080/tcp             compose_airflow-webserver_1
 74f3bbe506eb   postgres:13            "docker-entrypoint.s…"   18 minutes ago   Up 17 minutes (healthy)   5432/tcp                           compose_postgres_1
 0bd6576d23cb   redis:latest           "docker-entrypoint.s…"   10 hours ago     Up 17 minutes (healthy)   0.0.0.0:6379->6379/tcp             compose_redis_1
-
+```
+  
 ### Accessing the environment
 After starting Airflow, you can interact with it in 3 ways:
 - by running CLI commands.
@@ -127,23 +143,25 @@ After starting Airflow, you can interact with it in 3 ways:
 
 #### Running the CLI commands
   You can also run CLI commands, but you have to do it in one of the defined airflow-* services. For example, to run airflow info, run the following command:
-  
+  ```ruby
   docker compose run airflow-worker airflow info
+  ```
   
   If you have Linux or Mac OS, you can make your work easier and download a optional wrapper scripts that will allow you to run commands with a simpler command.
   
+  ```ruby
   curl -LfO 'https://airflow.apache.org/docs/apache-airflow/2.5.1/airflow.sh'
   chmod +x airflow.sh
-  
+  ```
   Now you can run commands easier.
-  
+  ```ruby
   ./airflow.sh info
-  
+  ```
   You can also use bash as parameter to enter interactive bash shell in the container or python to enter python container.
-
+```ruby
   ./airflow.sh bash
   ./airflow.sh python
-  
+```  
 #### Accessing the web interface
 Once the cluster has started up, you can log in to the web interface and begin experimenting with DAGs.
   The webserver is available at: http://localhost:8080. The default account has the login airflow and the password airflow.
@@ -153,17 +171,17 @@ Once the cluster has started up, you can log in to the web interface and begin e
   The webserver is available at: http://localhost:8080. The default account has the login airflow and the password airflow.
   
   Here is a sample curl command, which sends a request to retrieve a pool list:
-  
+```ruby  
   ENDPOINT_URL="http://localhost:8080/"
   curl -X GET  \
     --user "airflow:airflow" \
     "${ENDPOINT_URL}/api/v1/pools"
-  
+```  
 ### Cleaning up
 To stop and delete containers, delete volumes with database data and download images, run:
-
+```ruby
 docker compose down --volumes --rmi all
-  
+```  
 ### Using custom images
 When you want to run Airflow locally, you might want to use an extended image, containing some additional dependencies - for example you might add new python packages, or upgrade airflow providers to a later version. This can be done very easily by specifying build: . in your docker-compose.yaml and placing a custom Dockerfile alongside your docker-compose.yaml. Then you can use docker compose build command to build your image (you need to do it only once). You can also add the --build flag to your docker compose commands to rebuild the images on-the-fly when you run other docker compose commands.
 
